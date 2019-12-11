@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Jobs from './components/jobs';
+
+const JOB_API_URL='http://localhost:3001/jobs';
+
+const jobs=[
+  {
+    title: "SWE",
+    company: "Google"
+  },
+  {
+    title:"SDE-1",
+    company: "Amazon"
+  }
+]
+
+async function fetchJobs(updateJobs){
+  const res=await fetch(JOB_API_URL);
+  const json=await res.json();
+  updateJobs(json)
+  console.log({json});
+}
 
 function App() {
+
+  const [jobList,updateJobs] =React.useState([]);
+  React.useEffect(()=>{
+    fetchJobs(updateJobs);
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Jobs jobs={jobList}></Jobs>
     </div>
   );
 }
